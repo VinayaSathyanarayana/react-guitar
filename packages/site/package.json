@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^2.3.0",
+    "@tonaljs/midi": "^3.5.4",
     "@types/lodash.range": "^3.2.6",
     "@types/react-toggle": "^4.0.2",
     "lodash.range": "^3.2.0",

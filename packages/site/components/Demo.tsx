@@ -8,14 +8,14 @@ import Number from './Number'
 import Toggle from './Toggle'
 import Select from './Select'
 import Label from './Label'
+import { midiToNoteName } from '@tonaljs/midi'
 
 export default function Demo() {
   const [playOnHover, setPlayOnHover] = useState(false)
   const [lefty, setLefty] = useState(false)
   const [frets, setFrets] = useState(22)
   const [strings, setStrings] = useState([0, 0, 0, 0, 0, 0])
-  const [tuningName, setTuningName] = useState<keyof typeof tunings>('standard')
-  const tuning = tunings[tuningName]
+  const [tuning, setTuning] = useState(tunings.standard)
   const { play, strum } = useSound({ E2, D3, G3, E4 }, strings, tuning)
 
   return (
@@ -23,9 +23,17 @@ export default function Demo() {
       <div className="flex flex-wrap items-stretch justify-center px-4">
         <Label name="Tuning">
           <Select
-            value={tuningName}
-            values={Object.keys(tunings) as (keyof typeof tunings)[]}
-            onChange={setTuningName}
+            value={tuning}
+            values={Object.values(tunings)}
+            label={tuning =>
+              tuning
+                .map(midi =>
+                  midiToNoteName(midi, { pitchClass: true, sharps: true })
+                )
+                .reverse()
+                .join(' ')
+            }
+            onChange={setTuning}
           />
         </Label>
         <Label name="Number of frets">
