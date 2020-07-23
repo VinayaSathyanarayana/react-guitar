@@ -15,6 +15,14 @@ export default function Select<T>(props: {
         value && props.onChange(value)
       }}
     >
+      {!props.values.find(
+        value => props.label(value) === props.label(props.value)
+      ) && (
+        <option value={props.label(props.value)}>
+          {props.label(props.value)}
+        </option>
+      )}
+
       {props.values.sort().map((value, i) => (
         <option key={i} value={props.label(value)}>
           {props.label(value)}

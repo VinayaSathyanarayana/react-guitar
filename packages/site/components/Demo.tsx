@@ -9,14 +9,19 @@ import Toggle from './Toggle'
 import Select from './Select'
 import Label from './Label'
 import { midiToNoteName } from '@tonaljs/midi'
+import useQueryState from '../hooks/query-state'
+import { useCopyToClipboard } from 'react-use'
 
 export default function Demo() {
   const [playOnHover, setPlayOnHover] = useState(false)
   const [lefty, setLefty] = useState(false)
   const [frets, setFrets] = useState(22)
-  const [strings, setStrings] = useState([0, 0, 0, 0, 0, 0])
-  const [tuning, setTuning] = useState(tunings.standard)
+  const { url, tuning, strings, setTuning, setStrings } = useQueryState({
+    strings: [0, 0, 0, 0, 0, 0],
+    tuning: tunings.standard
+  })
   const { play, strum } = useSound({ E2, D3, G3, E4 }, strings, tuning)
+  const [_, copy] = useCopyToClipboard()
 
   return (
     <div className="slide-up w-full py-4">
@@ -36,7 +41,7 @@ export default function Demo() {
             onChange={setTuning}
           />
         </Label>
-        <Label name="Number of frets">
+        <Label name="Frets">
           <Number value={frets} min={0} max={40} onChange={setFrets} />
         </Label>
         <Label name="Left handed">
@@ -52,6 +57,15 @@ export default function Demo() {
             title="Strum"
           >
             🎶 👆
+          </button>
+        </Label>
+        <Label name="Copy Link">
+          <button
+            className="border-2 hover:bg-gray-200 font-bold py-1 px-2 rounded"
+            onClick={() => copy(url)}
+            title={`Copy link: ${url}`}
+          >
+            🎸🔗
           </button>
         </Label>
       </div>

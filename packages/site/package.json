@@ -21,6 +21,7 @@
     "react-dom": "16.13.1",
     "react-guitar": "^0.2.10",
     "react-switch": "^5.0.1",
+    "react-use": "^15.3.2",
     "tailwindcss": "^1.5.1"
   }
 }

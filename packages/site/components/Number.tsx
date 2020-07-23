@@ -22,7 +22,7 @@ export default function Number(props: {
   }, [value, props.value, props.onChange])
   return (
     <input
-      className="w-24 appearance-none placeholder-gray-500 placeholder-opacity-100 border rounded h-10 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      className="w-16 appearance-none placeholder-gray-500 placeholder-opacity-100 border rounded h-10 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
       disabled={props.disabled}
       type="number"
       min={props.min}
