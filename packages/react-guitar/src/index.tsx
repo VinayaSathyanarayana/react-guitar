@@ -1,7 +1,6 @@
 import useSound from './hooks/sound'
 import tunings from './music/tunings'
 import React, { useEffect, useRef } from 'react'
-import min from 'lodash.min'
 import range from 'lodash.range'
 import scroll from 'scroll'
 import { set } from './util/arrays'
@@ -33,7 +32,7 @@ export function getRenderFingerRelative(tuning: number[], root: number) {
 
 export default function Guitar(props: {
   className?: string
-  fitFretting?: boolean
+  center?: boolean
   strings?: number[]
   frets?: {
     from: number
@@ -46,7 +45,7 @@ export default function Guitar(props: {
 }) {
   const {
     strings = [],
-    fitFretting = false,
+    center = false,
     frets = { from: 0, amount: 22 },
     lefty = false,
     renderFinger
@@ -55,26 +54,31 @@ export default function Guitar(props: {
   const fretNodesRef = useRef({} as { [K: number]: HTMLLIElement | null })
   useEffect(() => {
     const fretsNode = fretsNodeRef.current
-    if (fretsNode) {
-      const toFret =
-        min(strings.map(fret => fret).filter(fret => fret > 0)) || 1
+    if (center && fretsNode) {
+      const pressedFrets = strings.filter(fret => fret > 0)
+      const minFret = Math.min.apply(Math, pressedFrets)
+      const maxFret = Math.max.apply(Math, pressedFrets)
+      const toFret = minFret + Math.floor((maxFret - minFret) / 2)
       const fretNode = fretNodesRef.current[toFret]
-      if (fitFretting && fretNode) {
-        if (lefty) {
-          if (fretNode.offsetLeft > 0) {
-            scroll.left(fretsNode, fretsNode.scrollWidth - fretNode.offsetLeft)
-          } else {
-            scroll.left(
-              fretsNode,
-              fretNode.offsetLeft - fretsNode.offsetWidth + fretNode.offsetWidth
-            )
-          }
+      if (fretNode) {
+        if (lefty && fretNode.offsetLeft > 0) {
+          scroll.left(
+            fretsNode,
+            fretsNode.scrollWidth / 2 -
+              fretNode.offsetLeft -
+              fretNode.offsetWidth / 2
+          )
         } else {
-          scroll.left(fretsNode, fretNode.offsetLeft)
+          scroll.left(
+            fretsNode,
+            fretNode.offsetLeft -
+              fretsNode.offsetWidth / 2 +
+              fretNode.offsetWidth / 2
+          )
         }
       }
     }
-  }, [fretsNodeRef, fretNodesRef, strings])
+  }, [fretsNodeRef, fretNodesRef, strings, center])
   return (
     <div className={classNames('guitar', { lefty }, props.className)}>
       <ol className="frets" ref={fretsNodeRef}>

@@ -72,6 +72,7 @@ export default function Demo() {
       <div className="relative flex-grow mt-4 flex items-center justify-center">
         <div className="sm:rounded overflow-hidden shadow">
           <Guitar
+            center
             frets={{ from: 0, amount: frets }}
             strings={tuning.map((_, i) => strings[i] ?? 0)}
             lefty={lefty}
